@@ -10,6 +10,7 @@
         :root {
             --primary: #2563eb;
             --success: #10b981;
+            --warning: #f59e0b; /* Warna untuk Izin */
             --danger: #ef4444;
             --bg: #f8fafc;
             --card: #ffffff;
@@ -32,7 +33,7 @@
 
         .app-container {
             width: 100%;
-            max-width: 480px; /* Mobile width limit */
+            max-width: 480px;
             background: var(--bg);
             padding: 24px;
             display: flex;
@@ -40,26 +41,21 @@
             gap: 24px;
         }
 
-        /* HEADER */
-        header {
-            margin-top: 10px;
-        }
+        header { margin-top: 10px; }
         h1 { font-size: 1.5rem; font-weight: 600; }
         p.subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 4px; }
 
-        /* CARD STYLE */
         .card {
             background: var(--card);
             border-radius: var(--radius);
             padding: 20px;
             box-shadow: var(--shadow);
-            transition: transform 0.2s;
         }
 
-        /* INPUT GROUP */
         .input-group { margin-bottom: 16px; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-light); }
-        input, select {
+        
+        input, select, textarea {
             width: 100%;
             padding: 14px;
             border: 1px solid #e2e8f0;
@@ -67,15 +63,28 @@
             font-size: 1rem;
             outline: none;
             background: #f8fafc;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            font-family: inherit;
         }
-        input:focus { border-color: var(--primary); background: #fff; }
+        input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
+        
+        /* Textarea khusus alasan */
+        textarea {
+            resize: none;
+            height: 80px;
+        }
 
-        /* BUTTONS GRID */
+        /* BUTTONS GRID UPDATE */
         .action-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 12px; /* Jarak antar tombol */
+            margin-bottom: 12px;
+        }
+
+        /* Tombol Izin Full Width */
+        .btn-full {
+            width: 100%;
         }
 
         button {
@@ -89,16 +98,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
             transition: opacity 0.2s, transform 0.1s;
         }
         button:active { transform: scale(0.98); }
         
-        .btn-in { background-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .btn-out { background-color: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .btn-in { background-color: var(--primary); }
+        .btn-out { background-color: var(--danger); }
+        .btn-izin { background-color: var(--warning); color: #fff; } /* Style tombol Izin */
+        
         .btn-loading { opacity: 0.7; pointer-events: none; }
 
-        /* STATUS & CLOCK */
         .clock-display {
             text-align: center;
             font-size: 2.5rem;
@@ -115,7 +124,6 @@
             margin-bottom: 20px;
         }
 
-        /* ALERT */
         #statusMessage {
             display: none;
             padding: 12px;
@@ -126,8 +134,7 @@
         }
         .success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
         .error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-        /* FOOTER */
+        
         .footer {
             text-align: center;
             font-size: 0.75rem;
@@ -142,39 +149,41 @@
     <div class="app-container">
         <header>
             <h1>Absensi Internship</h1>
-            <p class="subtitle">Silahkan absen sesuai jadwal.</p>
+            <p class="subtitle">Silahkan absen sebelum dan sesudah bekerja.</p>
         </header>
 
         <div class="card">
             <div class="clock-display" id="clock">00:00</div>
-            <div class="date-display" id="date">Senin, 1 Januari 2024</div>
+            <div class="date-display" id="date">...</div>
 
             <div class="input-group">
                 <label for="nama">Nama Karyawan</label>
-                <input type="text" value="Alana" id="nama" placeholder="Ketik nama Anda..." required autocomplete="name">
+                <input type="text" id="nama" value="Alana" placeholder="Ketik nama Anda..." required autocomplete="name">
+            </div>
+
+            <div class="input-group">
+                <label for="alasan">Keterangan / Alasan (Khusus Izin)</label>
+                <textarea id="alasan" placeholder="Contoh: Sakit demam, Izin urusan keluarga, dll. (Kosongkan jika Masuk/Pulang)"></textarea>
             </div>
 
             <div class="action-grid">
-                <button class="btn-in" onclick="submitAbsen('MASUK')">
-                    <span>Absen Masuk</span>
-                </button>
-                <button class="btn-out" onclick="submitAbsen('PULANG')">
-                    <span>Absen Pulang</span>
-                </button>
+                <button class="btn-in" onclick="submitAbsen('MASUK')">Absen Masuk</button>
+                <button class="btn-out" onclick="submitAbsen('PULANG')">Absen Pulang</button>
             </div>
+            <button class="btn-izin btn-full" onclick="submitAbsen('IZIN')">Ajukan Izin / Sakit</button>
+
             <div id="statusMessage"></div>
         </div>
 
         <div class="footer">
-            &copy; 2025 HR Yanoshi System V1.0
+            &copy; 2025 HR Yanoshi System V1.1
         </div>
     </div>
 
     <script>
-        // CONFIGURATION
+        // --- GANTI URL INI DENGAN HASIL DEPLOY TERBARU ANDA ---
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBoY37qxOmPwy8RWZ9T-NJARrn5s7aegb0qK5fEnuzQRT_CxC34dQckgblk-o2X5yE/exec'; 
 
-        // 1. CLOCK REALTIME
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
@@ -183,63 +192,61 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. GET LOCATION & SUBMIT
         function submitAbsen(status) {
             const nama = document.getElementById('nama').value.trim();
-            const msgBox = document.getElementById('statusMessage');
+            const alasan = document.getElementById('alasan').value.trim();
             
-            // Validasi Nama
+            // 1. Validasi Nama
             if (!nama) {
                 showStatus('Harap isi nama!', 'error');
                 return;
             }
 
-            // UI Loading state
-            setLoading(true);
-            showStatus('Mohon Tunggu...', 'success');
+            // 2. Validasi Khusus IZIN
+            // Jika statusnya IZIN, maka alasan WAJIB diisi.
+            if (status === 'IZIN' && !alasan) {
+                showStatus('Wajib mengisi kolom Keterangan/Alasan untuk izin!', 'error');
+                document.getElementById('alasan').focus(); // Arahkan kursor ke kolom alasan
+                return;
+            }
 
-            // Ambil Geolocation
+            setLoading(true);
+            showStatus('Memproses data...', 'success');
+
+            // Ambil Lokasi (Untuk Izin pun kita tetap ambil lokasi sebagai bukti pengajuan)
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const lokasi = `${position.coords.latitude}, ${position.coords.longitude}`;
-                        sendData(nama, status, lokasi);
+                        sendData(nama, status, lokasi, alasan);
                     },
                     (error) => {
-                        // Jika GPS dimatikan user, tetap kirim dengan tanda "No Location" atau block (sesuai kebijakan)
-                        // Disini kita tetap kirim tapi beri catatan
-                        sendData(nama, status, "GPS Disabled/Error"); 
+                        sendData(nama, status, "GPS Error/Disabled", alasan); 
                     }
                 );
             } else {
-                sendData(nama, status, "GPS Not Supported");
+                sendData(nama, status, "GPS Not Supported", alasan);
             }
         }
 
-        // 3. SEND DATA TO GOOGLE SHEET
-        function sendData(nama, status, lokasi) {
-            const msgBox = document.getElementById('statusMessage');
+        function sendData(nama, status, lokasi, alasan) {
             const deviceInfo = navigator.userAgent;
-
-            // Menggunakan FormData untuk POST request
-            // Trik: Apps Script Web App handle GET/POST redirects. 
-            // Kita gunakan fetch dengan mode 'no-cors' karena Apps Script mereturn redirect,
-            // namun ini berarti kita tidak bisa baca respons JSON secara langsung di browser modern dengan mudah tanpa proxy.
-            // WORKAROUND: Kirim data via URL parameters (GET/POST form encoded) agar lebih reliable di mobile web.
             
             const formData = new FormData();
             formData.append('nama', nama);
             formData.append('status', status);
             formData.append('lokasi', lokasi);
             formData.append('device', deviceInfo);
+            // Kirim alasan juga (Jika status Masuk/Pulang dan alasan kosong, backend akan terima string kosong)
+            formData.append('alasan', alasan); 
 
-            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+            fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
                 .then(response => {
-                    // Karena AppScript biasa redirect, fetch sukses dianggap terkirim
-                    showStatus(`Absen ${status} Berhasil!`, 'success');
-                    document.getElementById('nama').value = ''; // Reset form
+                    showStatus(`Status ${status} Berhasil Dikirim!`, 'success');
+                    if(status === 'IZIN') {
+                        document.getElementById('alasan').value = ''; // Reset alasan
+                    }
                     setLoading(false);
-                    // Simpan nama di localstorage agar user tidak ngetik ulang besoknya
                     localStorage.setItem('last_name', nama);
                 })
                 .catch(error => {
@@ -248,16 +255,13 @@
                 });
         }
 
-        // 4. UTILS
         function showStatus(msg, type) {
             const el = document.getElementById('statusMessage');
             el.style.display = 'block';
             el.className = type;
             el.innerText = msg;
-            
-            // Auto hide error after 3s
             if(type === 'success') {
-                setTimeout(() => { el.style.display = 'none'; }, 5000);
+                setTimeout(() => { el.style.display = 'none'; }, 4000);
             }
         }
 
@@ -274,7 +278,6 @@
             });
         }
 
-        // Auto fill nama jika pernah absen sebelumnya
         window.onload = () => {
             const savedName = localStorage.getItem('last_name');
             if(savedName) document.getElementById('nama').value = savedName;
