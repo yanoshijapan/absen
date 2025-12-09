@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E-Absensi Mobile</title>
+    <title>E-Absensi Yanoshi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         /* CSS VARIABLES & RESET */
@@ -141,8 +141,8 @@
 
     <div class="app-container">
         <header>
-            <h1>Portal Absensi</h1>
-            <p class="subtitle">Silahkan absen sesuai jadwal kerja.</p>
+            <h1>Absensi Internship</h1>
+            <p class="subtitle">Silahkan absen sesuai jadwal.</p>
         </header>
 
         <div class="card">
@@ -151,22 +151,22 @@
 
             <div class="input-group">
                 <label for="nama">Nama Karyawan</label>
-                <input type="text" id="nama" placeholder="Ketik nama Anda..." required autocomplete="name">
+                <input type="text" value="Alana" id="nama" placeholder="Ketik nama Anda..." required autocomplete="name">
             </div>
 
             <div class="action-grid">
                 <button class="btn-in" onclick="submitAbsen('MASUK')">
-                    <span>Masuk</span>
+                    <span>Absen Masuk</span>
                 </button>
                 <button class="btn-out" onclick="submitAbsen('PULANG')">
-                    <span>Pulang</span>
+                    <span>Absen Pulang</span>
                 </button>
             </div>
             <div id="statusMessage"></div>
         </div>
 
         <div class="footer">
-            &copy; 2025 HR System V1.0
+            &copy; 2025 HR Yanoshi System V1.0
         </div>
     </div>
 
@@ -190,13 +190,13 @@
             
             // Validasi Nama
             if (!nama) {
-                showStatus('Harap isi nama karyawan!', 'error');
+                showStatus('Harap isi nama!', 'error');
                 return;
             }
 
             // UI Loading state
             setLoading(true);
-            showStatus('Mendapatkan lokasi...', 'success');
+            showStatus('Mohon Tunggu...', 'success');
 
             // Ambil Geolocation
             if (navigator.geolocation) {
