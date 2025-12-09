@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E-Absensi Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS VARIABLES & RESET */
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* Mobile width limit */
+            background: var(--bg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* HEADER */
+        header {
+            margin-top: 10px;
+        }
+        h1 { font-size: 1.5rem; font-weight: 600; }
+        p.subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 4px; }
+
+        /* CARD STYLE */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        /* INPUT GROUP */
+        .input-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-light); }
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            background: #f8fafc;
+            transition: border-color 0.3s;
+        }
+        input:focus { border-color: var(--primary); background: #fff; }
+
+        /* BUTTONS GRID */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        button {
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        button:active { transform: scale(0.98); }
+        
+        .btn-in { background-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .btn-out { background-color: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .btn-loading { opacity: 0.7; pointer-events: none; }
+
+        /* STATUS & CLOCK */
+        .clock-display {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--text);
+            margin: 10px 0;
+            letter-spacing: -1px;
+        }
+        
+        .date-display {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* ALERT */
+        #statusMessage {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Portal Absensi</h1>
+            <p class="subtitle">Silahkan absen sesuai jadwal kerja.</p>
+        </header>
+
+        <div class="card">
+            <div class="clock-display" id="clock">00:00</div>
+            <div class="date-display" id="date">Senin, 1 Januari 2024</div>
+
+            <div class="input-group">
+                <label for="nama">Nama Karyawan</label>
+                <input type="text" id="nama" placeholder="Ketik nama Anda..." required autocomplete="name">
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-in" onclick="submitAbsen('MASUK')">
+                    <span>Masuk</span>
+                </button>
+                <button class="btn-out" onclick="submitAbsen('PULANG')">
+                    <span>Pulang</span>
+                </button>
+            </div>
+            <div id="statusMessage"></div>
+        </div>
+
+        <div class="footer">
+            &copy; 2025 HR System V1.0
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION
+        const SCRIPT_URL = 'PASTE_URL_WEB_APP_DISINI'; 
+
+        // 1. CLOCK REALTIME
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('date').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. GET LOCATION & SUBMIT
+        function submitAbsen(status) {
+            const nama = document.getElementById('nama').value.trim();
+            const msgBox = document.getElementById('statusMessage');
+            
+            // Validasi Nama
+            if (!nama) {
+                showStatus('Harap isi nama karyawan!', 'error');
+                return;
+            }
+
+            // UI Loading state
+            setLoading(true);
+            showStatus('Mendapatkan lokasi...', 'success');
+
+            // Ambil Geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lokasi = `${position.coords.latitude}, ${position.coords.longitude}`;
+                        sendData(nama, status, lokasi);
+                    },
+                    (error) => {
+                        // Jika GPS dimatikan user, tetap kirim dengan tanda "No Location" atau block (sesuai kebijakan)
+                        // Disini kita tetap kirim tapi beri catatan
+                        sendData(nama, status, "GPS Disabled/Error"); 
+                    }
+                );
+            } else {
+                sendData(nama, status, "GPS Not Supported");
+            }
+        }
+
+        // 3. SEND DATA TO GOOGLE SHEET
+        function sendData(nama, status, lokasi) {
+            const msgBox = document.getElementById('statusMessage');
+            const deviceInfo = navigator.userAgent;
+
+            // Menggunakan FormData untuk POST request
+            // Trik: Apps Script Web App handle GET/POST redirects. 
+            // Kita gunakan fetch dengan mode 'no-cors' karena Apps Script mereturn redirect,
+            // namun ini berarti kita tidak bisa baca respons JSON secara langsung di browser modern dengan mudah tanpa proxy.
+            // WORKAROUND: Kirim data via URL parameters (GET/POST form encoded) agar lebih reliable di mobile web.
+            
+            const formData = new FormData();
+            formData.append('nama', nama);
+            formData.append('status', status);
+            formData.append('lokasi', lokasi);
+            formData.append('device', deviceInfo);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+                .then(response => {
+                    // Karena AppScript biasa redirect, fetch sukses dianggap terkirim
+                    showStatus(`Absen ${status} Berhasil!`, 'success');
+                    document.getElementById('nama').value = ''; // Reset form
+                    setLoading(false);
+                    // Simpan nama di localstorage agar user tidak ngetik ulang besoknya
+                    localStorage.setItem('last_name', nama);
+                })
+                .catch(error => {
+                    showStatus('Gagal koneksi ke server.', 'error');
+                    setLoading(false);
+                });
+        }
+
+        // 4. UTILS
+        function showStatus(msg, type) {
+            const el = document.getElementById('statusMessage');
+            el.style.display = 'block';
+            el.className = type;
+            el.innerText = msg;
+            
+            // Auto hide error after 3s
+            if(type === 'success') {
+                setTimeout(() => { el.style.display = 'none'; }, 5000);
+            }
+        }
+
+        function setLoading(isLoading) {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if(isLoading) {
+                    btn.classList.add('btn-loading');
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // Auto fill nama jika pernah absen sebelumnya
+        window.onload = () => {
+            const savedName = localStorage.getItem('last_name');
+            if(savedName) document.getElementById('nama').value = savedName;
+        }
+    </script>
+</body>
+</html>
