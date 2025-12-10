@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Absensi Yanoshi -Intern</title>
+    <title>Absensi Yanoshi - Intern</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. SETTING DASAR & VARIAN WARNA --- */
+        /* --- 1. SETTING DASAR --- */
         :root {
-            --primary: #2563eb;       /* Biru Utama */
-            --primary-dark: #1d4ed8;
-            --success: #10b981;       /* Hijau Sukses */
-            --warning: #f59e0b;       /* Kuning Izin */
-            --danger: #ef4444;        /* Merah Pulang */
-            --bg: #f1f5f9;            /* Background Abu terang */
-            --card: #ffffff;          /* Putih Kartu */
-            --text: #1e293b;          /* Hitam Teks */
-            --text-muted: #64748b;    /* Abu Teks */
-            --radius: 16px;           /* Lengkungan Sudut */
-            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --primary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+            --radius: 16px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -34,147 +31,109 @@
             padding: 20px;
         }
 
-        /* Container utama menyerupai layar HP */
         .app-container {
             width: 100%;
-            max-width: 420px; /* Lebar maksimal HP */
+            max-width: 420px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        /* --- 2. HEADER & CLOCK --- */
         header { text-align: center; margin-bottom: 10px; }
-        h1 { font-size: 1.25rem; font-weight: 700; color: var(--text); }
-        .subtitle { font-size: 0.875rem; color: var(--text-muted); }
+        h1 { font-size: 1.25rem; font-weight: 700; }
+        .subtitle { font-size: 0.875rem; color: #64748b; }
 
         .card {
             background: var(--card);
             border-radius: var(--radius);
             padding: 24px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
-        .clock-wrapper { text-align: center; margin-bottom: 5px; }
+        .clock-wrapper { text-align: center; }
         .time { font-size: 2.5rem; font-weight: 300; line-height: 1; letter-spacing: -1px; }
-        .date { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; font-weight: 500; }
+        .date { font-size: 0.9rem; color: #64748b; margin-top: 5px; }
 
-        /* --- 3. KAMERA AREA --- */
-        .camera-box {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 100%; /* Membuat rasio kotak 1:1 (Square) */
-            background: #000;
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 2px solid #e2e8f0;
-        }
-        
-        video {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transform: scaleX(-1); /* Efek Cermin */
-        }
-        
-        /* Canvas disembunyikan (hanya untuk capture) */
-        canvas { display: none; }
-
-        /* --- 4. FORM INPUT --- */
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
-        
+        /* INPUT STYLE */
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #64748b; }
         input, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s;
-            background: #f8fafc;
+            width: 100%; padding: 14px; border: 1px solid #cbd5e1;
+            border-radius: 12px; font-size: 1rem; outline: none; background: #f8fafc;
+            font-family: inherit; transition: 0.2s;
         }
         input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
-        textarea { resize: none; height: 80px; }
-
-        /* --- 5. TOMBOL AKSI --- */
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        
+        /* BUTTONS */
+        .grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         button {
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: filter 0.2s, transform 0.1s;
+            border: none; padding: 16px; border-radius: 12px;
+            font-size: 1rem; font-weight: 600; cursor: pointer; color: white;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.1s;
         }
         button:active { transform: scale(0.98); }
 
         .btn-masuk { background: var(--primary); }
         .btn-pulang { background: var(--danger); }
-        .btn-izin { background: var(--warning); width: 100%; margin-top: 0; } /* Izin Full Width */
+        .btn-izin { background: var(--warning); width: 100%; color: white; }
+        .btn-cancel { background: #e2e8f0; color: var(--text); width: 100%; margin-top: 10px; }
 
-        /* --- 6. LOADING OVERLAY --- */
-        .loading-overlay {
-            display: none;
+        /* --- 2. MODAL KAMERA & MODAL IZIN (POPUP) --- */
+        .modal-fullscreen {
+            display: none; /* Hidden by default */
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            z-index: 50;
-            justify-content: center; align-items: center; flex-direction: column;
-            text-align: center;
+            background: #000; z-index: 100;
+            flex-direction: column;
         }
+
+        /* Modal Izin (Putih, bukan full black) */
+        .modal-form {
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .form-box {
+            background: white; width: 90%; max-width: 350px;
+            padding: 24px; border-radius: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Camera Specific */
+        .camera-view {
+            flex: 1; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .camera-controls { padding: 30px; background: #000; display: flex; gap: 15px; justify-content: center; }
+        .btn-capture { background: white; color: black; border-radius: 50px; flex: 2; }
+        .btn-cancel-cam { background: #333; color: white; flex: 1; }
+
+        /* --- 3. OVERLAYS (Loading & Success) --- */
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 200; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .loading { background: rgba(255,255,255,0.9); text-align: center; }
         .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid #e2e8f0; border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary);
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- 7. POPUP SUKSES --- */
-        .success-overlay {
-            display: none;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 60;
-            backdrop-filter: blur(4px);
-            justify-content: center; align-items: center;
-        }
-        .popup-box {
-            background: white; padding: 30px; border-radius: 24px;
-            text-align: center; width: 85%; max-width: 320px;
-            animation: popupBounce 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-        @keyframes popupBounce { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
-        .checkmark-circle {
-            width: 70px; height: 70px; background: #d1fae5; color: #10b981;
-            border-radius: 50%; margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 35px;
+        /* Popup Success */
+        .popup-box {
+            background: white; padding: 30px; border-radius: 24px; text-align: center; width: 85%; max-width: 300px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            animation: bounce 0.4s;
         }
-        .popup-btn {
-            background: var(--text); color: white; width: 100%; margin-top: 20px;
-        }
+        @keyframes bounce { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+        .checkmark { font-size: 40px; color: #10b981; display: block; margin-bottom: 10px; }
 
-        /* Footer */
         .footer { text-align: center; font-size: 0.75rem; color: #94a3b8; margin-top: auto; padding-bottom: 10px; }
+        canvas { display: none; }
     </style>
 </head>
 <body>
@@ -188,154 +147,155 @@
         <div class="card">
             <div class="clock-wrapper">
                 <div class="time" id="clock">00:00</div>
-                <div class="date" id="date">Senin, 1 Januari 2024</div>
-            </div>
-
-            <div class="camera-box">
-                <video id="videoElement" autoplay playsinline muted></video>
-            </div>
-            <canvas id="canvasElement"></canvas>
-
-            <div class="input-group">
-                <label for="nama">Nama</label>
-                <input type="text" id="nama" value="Alana" placeholder="Masukkan namamu..." autocomplete="off">
+                <div class="date" id="date">...</div>
             </div>
 
             <div class="input-group">
-                <label for="alasan">Keterangan (Khusus Izin)</label>
-                <textarea id="alasan" placeholder="Contoh: Sakit, Izin Keluarga, dll."></textarea>
+                <label>Nama Karyawan</label>
+                <input type="text" id="nama" value=" Alana" placeholder="Ketik namamu..." autocomplete="off">
             </div>
 
             <div class="grid-buttons">
-                <button class="btn-masuk" onclick="processAbsensi('MASUK')">
-                    📸 Absen Masuk
-                </button>
-                <button class="btn-pulang" onclick="processAbsensi('PULANG')">
-                    📸 Absen Pulang
-                </button>
+                <button class="btn-masuk" onclick="bukaKamera('MASUK')">Absen Masuk</button>
+                <button class="btn-pulang" onclick="bukaKamera('PULANG')">Absen Pulang</button>
             </div>
-            <button class="btn-izin" onclick="processAbsensi('IZIN')">
-                📝 Ajukan Izin / Sakit
-            </button>
+            
+            <button class="btn-izin" onclick="bukaModalIzin()">Ajukan Izin / Sakit</button>
         </div>
 
-        <div class="footer">
-            &copy; 2025 Yanoshi System v2.0
+        <div class="footer">&copy; 2025 Yanoshi System</div>
+    </div>
+
+    <div id="cameraModal" class="modal-fullscreen">
+        <div class="camera-view">
+            <video id="videoElement" autoplay playsinline muted></video>
+        </div>
+        <div class="camera-controls">
+            <button class="btn-cancel-cam" onclick="tutupKamera()">Batal</button>
+            <button class="btn-capture" onclick="jepretDanKirim()">📸 Ambil Foto</button>
         </div>
     </div>
 
-    <div class="loading-overlay" id="loadingOverlay">
+    <div id="izinModal" class="modal-fullscreen modal-form">
+        <div class="form-box">
+            <h2 style="margin-bottom: 15px; font-size: 1.2rem;">Form Izin</h2>
+            
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label>Alasan / Keterangan</label>
+                <textarea id="alasanInput" rows="4" placeholder="Contoh: Sakit Demam, Urusan Keluarga, Ban Bocor..."></textarea>
+            </div>
+
+            <button class="btn-izin" onclick="prosesKirimIzin()">Kirim Pengajuan</button>
+            <button class="btn-cancel" onclick="tutupModalIzin()">Batal</button>
+        </div>
+    </div>
+
+    <div class="overlay loading" id="loadingOverlay">
         <div class="spinner"></div>
         <h3>Mengirim Data...</h3>
-        <p style="font-size: 0.9rem; color: #666;">Mohon tunggu sebentar</p>
     </div>
 
-    <div class="success-overlay" id="successPopup">
+    <div class="overlay" id="successPopup" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);">
         <div class="popup-box">
-            <div class="checkmark-circle">✔</div>
-            <h2 style="font-size:1.2rem; margin-bottom:5px;">Berhasil!</h2>
-            <p style="font-size:0.9rem; color:#64748b;">Data absensi & foto telah tersimpan.</p>
-            <button class="popup-btn" onclick="closePopup()">Tutup</button>
+            <span class="checkmark">✔</span>
+            <h2>Berhasil!</h2>
+            <p style="color:#64748b; margin:10px 0;">Data absensi tersimpan.</p>
+            <button onclick="closePopup()" style="width:100%; background:#1e293b; color:white; padding:12px; border-radius:12px; border:none; cursor:pointer;">Tutup</button>
         </div>
     </div>
 
+    <canvas id="canvasElement"></canvas>
+
     <script>
-        // =================================================================
-        // KONFIGURASI PENTING
-        // Ganti URL di bawah ini dengan URL Web App (Exec) dari Google Script Anda
-        // =================================================================
+        // ==========================================
+        // GANTI URL SCRIPT DI BAWAH INI
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBoY37qxOmPwy8RWZ9T-NJARrn5s7aegb0qK5fEnuzQRT_CxC34dQckgblk-o2X5yE/exec'; 
-        // =================================================================
+        // ==========================================
 
-        const video = document.getElementById('videoElement');
-        const canvas = document.getElementById('canvasElement');
-        
-        // 1. SETUP JAM REALTIME
-        function updateClock() {
+        let streamKamera = null;
+        let statusPending = ""; 
+
+        // 1. JAM & TANGGAL
+        setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('date').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('date').innerText = now.toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+        }, 1000);
 
-        // 2. SETUP KAMERA (Jalan saat web dibuka)
-        async function startCamera() {
-            try {
-                // Meminta akses kamera depan (user facing)
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user', width: { ideal: 640 } } 
-                });
-                video.srcObject = stream;
-            } catch (err) {
-                console.error("Error akses kamera:", err);
-                alert("Gagal mengakses kamera. Pastikan izin kamera diberikan di browsermu.");
-            }
-        }
-        // Jalankan kamera
-        startCamera();
-
-        // 3. LOGIKA UTAMA ABSENSI
-        function processAbsensi(status) {
+        // --- LOGIKA KAMERA (MASUK/PULANG) ---
+        async function bukaKamera(status) {
             const nama = document.getElementById('nama').value.trim();
-            const alasan = document.getElementById('alasan').value.trim();
+            if (!nama) { alert("Harap isi Nama dulu!"); return; }
 
-            // Validasi Input Dasar
-            if (!nama) {
-                alert("Harap isi Nama!");
-                return;
+            statusPending = status;
+            document.getElementById('cameraModal').style.display = 'flex';
+
+            try {
+                streamKamera = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } } });
+                document.getElementById('videoElement').srcObject = streamKamera;
+            } catch (err) {
+                alert("Gagal akses kamera: " + err);
+                tutupKamera();
             }
+        }
 
-            // Validasi Khusus Izin
-            if (status === 'IZIN' && !alasan) {
-                alert("Untuk Izin, wajib mengisi kolom Keterangan!");
-                document.getElementById('alasan').focus();
-                return;
-            }
+        function tutupKamera() {
+            if (streamKamera) streamKamera.getTracks().forEach(track => track.stop());
+            document.getElementById('cameraModal').style.display = 'none';
+        }
 
-            // Tampilkan Loading
+        function jepretDanKirim() {
+            const video = document.getElementById('videoElement');
+            const canvas = document.getElementById('canvasElement');
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0);
+
+            const fotoBase64 = canvas.toDataURL('image/jpeg', 0.5).split(',')[1];
+            tutupKamera();
+            kirimDataKeServer(statusPending, fotoBase64, "-");
+        }
+
+        // --- LOGIKA IZIN (MODAL BARU) ---
+        function bukaModalIzin() {
+            const nama = document.getElementById('nama').value.trim();
+            if (!nama) { alert("Harap isi Nama dulu!"); return; }
+            
+            // Tampilkan Modal Izin
+            document.getElementById('izinModal').style.display = 'flex';
+            document.getElementById('alasanInput').focus();
+        }
+
+        function tutupModalIzin() {
+            document.getElementById('izinModal').style.display = 'none';
+        }
+
+        function prosesKirimIzin() {
+            const alasan = document.getElementById('alasanInput').value.trim();
+            if (!alasan) { alert("Wajib mengisi alasan izin!"); return; }
+            
+            tutupModalIzin();
+            kirimDataKeServer('IZIN', "", alasan); // Foto kosong, Alasan terisi
+        }
+
+        // --- LOGIKA PENGIRIMAN DATA ---
+        function kirimDataKeServer(status, foto, alasan) {
+            const nama = document.getElementById('nama').value.trim();
             document.getElementById('loadingOverlay').style.display = 'flex';
 
-            // Ambil Foto (Hanya jika Masuk/Pulang)
-            // Untuk Izin, kita kirim string kosong agar lebih cepat/hemat data
-            let fotoBase64 = "";
-            
-            if (status !== 'IZIN') {
-                // Capture frame video ke canvas
-                canvas.width = video.videoWidth || 640;
-                canvas.height = video.videoHeight || 480;
-                const ctx = canvas.getContext('2d');
-                
-                // Flip canvas agar sesuai preview (Mirroring)
-                ctx.translate(canvas.width, 0);
-                ctx.scale(-1, 1);
-                
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // Konversi ke JPG Base64 (Kualitas 0.6 kompresi sedang)
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
-                fotoBase64 = dataUrl.split(',')[1]; // Hapus prefix data:image/...
-            }
-
-            // Ambil Lokasi GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lokasi = `${position.coords.latitude},${position.coords.longitude}`;
-                        sendDataToScript(nama, status, lokasi, alasan, fotoBase64);
-                    },
-                    (error) => {
-                        // Jika GPS error/ditolak, tetap kirim dengan catatan
-                        sendDataToScript(nama, status, "GPS Error/Disabled", alasan, fotoBase64);
-                    }
+                    (pos) => sendFetch(nama, status, `${pos.coords.latitude},${pos.coords.longitude}`, alasan, foto),
+                    (err) => sendFetch(nama, status, "GPS Error", alasan, foto)
                 );
             } else {
-                sendDataToScript(nama, status, "GPS Not Supported", alasan, fotoBase64);
+                sendFetch(nama, status, "No GPS", alasan, foto);
             }
         }
 
-        // 4. KIRIM KE GOOGLE SHEETS
-        function sendDataToScript(nama, status, lokasi, alasan, foto) {
+        function sendFetch(nama, status, lokasi, alasan, foto) {
             const formData = new FormData();
             formData.append('nama', nama);
             formData.append('status', status);
@@ -344,36 +304,28 @@
             formData.append('device', navigator.userAgent);
             formData.append('fotoBase64', foto);
 
-            // Fetch dengan mode no-cors (Standard untuk GAS)
             fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
-                .then(response => {
-                    // Sembunyikan Loading
+                .then(() => {
                     document.getElementById('loadingOverlay').style.display = 'none';
-                    
-                    // Tampilkan Popup Sukses
                     document.getElementById('successPopup').style.display = 'flex';
-                    
-                    // Simpan nama di memori HP
                     localStorage.setItem('last_name_absen', nama);
                     
-                    // Reset Form Izin (Nama jangan direset)
-                    if(status === 'IZIN') document.getElementById('alasan').value = '';
+                    // Reset input alasan
+                    document.getElementById('alasanInput').value = '';
                 })
-                .catch(error => {
+                .catch(() => {
                     document.getElementById('loadingOverlay').style.display = 'none';
-                    alert("Terjadi kesalahan koneksi internet.");
+                    alert("Gagal koneksi internet.");
                 });
         }
 
-        // 5. FITUR TAMBAHAN
         function closePopup() {
             document.getElementById('successPopup').style.display = 'none';
         }
 
-        // Auto Load Nama Terakhir
         window.onload = () => {
-            const savedName = localStorage.getItem('last_name_absen');
-            if (savedName) document.getElementById('nama').value = savedName;
+            const saved = localStorage.getItem('last_name_absen');
+            if (saved) document.getElementById('nama').value = saved;
         };
     </script>
 </body>
