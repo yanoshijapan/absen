@@ -231,7 +231,13 @@
             document.getElementById('cameraModal').style.display = 'flex';
 
             try {
-                streamKamera = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } } });
+                streamKamera = await navigator.mediaDevices.getUserMedia({
+                    video: { 
+                        facingMode: 'user', 
+                        width: { ideal: 1280 }, // Target lebar HD
+                        height: { ideal: 720 }  // Target tinggi HD
+                    } 
+                });
                 document.getElementById('videoElement').srcObject = streamKamera;
             } catch (err) {
                 alert("Gagal akses kamera: " + err);
@@ -253,7 +259,7 @@
             ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(video, 0, 0);
 
-            const fotoBase64 = canvas.toDataURL('image/jpeg', 0.5).split(',')[1];
+            const fotoBase64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
             tutupKamera();
             kirimDataKeServer(statusPending, fotoBase64, "-");
         }
