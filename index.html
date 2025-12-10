@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E-Absensi Yanoshi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Absensi Yanoshi -Intern</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS VARIABLES */
+        /* --- 1. SETTING DASAR & VARIAN WARNA --- */
         :root {
-            --primary: #2563eb;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --radius: 16px;
+            --primary: #2563eb;       /* Biru Utama */
+            --primary-dark: #1d4ed8;
+            --success: #10b981;       /* Hijau Sukses */
+            --warning: #f59e0b;       /* Kuning Izin */
+            --danger: #ef4444;        /* Merah Pulang */
+            --bg: #f1f5f9;            /* Background Abu terang */
+            --card: #ffffff;          /* Putih Kartu */
+            --text: #1e293b;          /* Hitam Teks */
+            --text-muted: #64748b;    /* Abu Teks */
+            --radius: 16px;           /* Lengkungan Sudut */
+            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -28,146 +31,150 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
+        /* Container utama menyerupai layar HP */
         .app-container {
             width: 100%;
-            max-width: 480px;
-            background: var(--bg);
-            padding: 24px;
+            max-width: 420px; /* Lebar maksimal HP */
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
 
-        header { margin-top: 10px; }
-        h1 { font-size: 1.5rem; font-weight: 600; }
-        p.subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 4px; }
+        /* --- 2. HEADER & CLOCK --- */
+        header { text-align: center; margin-bottom: 10px; }
+        h1 { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+        .subtitle { font-size: 0.875rem; color: var(--text-muted); }
 
         .card {
             background: var(--card);
             border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .input-group { margin-bottom: 16px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-light); }
+        .clock-wrapper { text-align: center; margin-bottom: 5px; }
+        .time { font-size: 2.5rem; font-weight: 300; line-height: 1; letter-spacing: -1px; }
+        .date { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; font-weight: 500; }
+
+        /* --- 3. KAMERA AREA --- */
+        .camera-box {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; /* Membuat rasio kotak 1:1 (Square) */
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+        }
+        
+        video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Efek Cermin */
+        }
+        
+        /* Canvas disembunyikan (hanya untuk capture) */
+        canvas { display: none; }
+
+        /* --- 4. FORM INPUT --- */
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
         
         input, textarea {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
             border-radius: 12px;
             font-size: 1rem;
-            outline: none;
-            background: #f8fafc;
             font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #f8fafc;
         }
         input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
         textarea { resize: none; height: 80px; }
 
-        .action-grid {
+        /* --- 5. TOMBOL AKSI --- */
+        .grid-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 12px;
         }
-
-        .btn-full { width: 100%; }
 
         button {
             border: none;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             color: white;
-            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: filter 0.2s, transform 0.1s;
         }
         button:active { transform: scale(0.98); }
-        
-        .btn-in { background-color: var(--primary); }
-        .btn-out { background-color: var(--danger); }
-        .btn-izin { background-color: var(--warning); color: #fff; }
-        .btn-loading { opacity: 0.7; pointer-events: none; }
 
-        .clock-display {
-            text-align: center; font-size: 2.5rem; font-weight: 300; margin: 10px 0; letter-spacing: -1px;
-        }
-        .date-display {
-            text-align: center; color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;
-        }
+        .btn-masuk { background: var(--primary); }
+        .btn-pulang { background: var(--danger); }
+        .btn-izin { background: var(--warning); width: 100%; margin-top: 0; } /* Izin Full Width */
 
-        /* ERROR MESSAGE (Hanya untuk error) */
-        #errorMessage {
+        /* --- 6. LOADING OVERLAY --- */
+        .loading-overlay {
             display: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 50;
+            justify-content: center; align-items: center; flex-direction: column;
             text-align: center;
-            margin-top: 10px;
-            background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
         }
-        
-        .footer {
-            text-align: center; font-size: 0.75rem; color: #cbd5e1; margin-top: auto; padding-top: 20px;
-        }
-
-        /* --- STYLE POPUP SUCCESS --- */
-        .overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); /* Dimmed background */
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(2px);
-        }
-        
-        .popup-box {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            text-align: center;
-            width: 80%;
-            max-width: 300px;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            animation: popUpAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Checkmark Animation */
-        .checkmark-circle {
-            width: 60px; height: 60px;
-            background: #d1fae5;
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #e2e8f0; border-top: 4px solid var(--primary);
             border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex; align-items: center; justify-content: center;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
-        .checkmark {
-            color: #10b981;
-            font-size: 30px;
-            font-weight: bold;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .popup-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 5px; color: var(--text); }
-        .popup-desc { font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px; }
+        /* --- 7. POPUP SUKSES --- */
+        .success-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 60;
+            backdrop-filter: blur(4px);
+            justify-content: center; align-items: center;
+        }
+        .popup-box {
+            background: white; padding: 30px; border-radius: 24px;
+            text-align: center; width: 85%; max-width: 320px;
+            animation: popupBounce 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        @keyframes popupBounce { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
-        .btn-close {
-            background: var(--text);
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
+        .checkmark-circle {
+            width: 70px; height: 70px; background: #d1fae5; color: #10b981;
+            border-radius: 50%; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 35px;
+        }
+        .popup-btn {
+            background: var(--text); color: white; width: 100%; margin-top: 20px;
         }
 
-        @keyframes popUpAnim {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        /* Footer */
+        .footer { text-align: center; font-size: 0.75rem; color: #94a3b8; margin-top: auto; padding-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -175,51 +182,75 @@
     <div class="app-container">
         <header>
             <h1>Absensi Internship</h1>
-            <p class="subtitle">Silahkan absen sebelum dan sesudah bekerja.</p>
+            <p class="subtitle">PT. Yanoshi Japan Omiyage</p>
         </header>
 
         <div class="card">
-            <div class="clock-display" id="clock">00:00</div>
-            <div class="date-display" id="date">...</div>
+            <div class="clock-wrapper">
+                <div class="time" id="clock">00:00</div>
+                <div class="date" id="date">Senin, 1 Januari 2024</div>
+            </div>
+
+            <div class="camera-box">
+                <video id="videoElement" autoplay playsinline muted></video>
+            </div>
+            <canvas id="canvasElement"></canvas>
 
             <div class="input-group">
                 <label for="nama">Nama</label>
-                <input type="text" id="nama" value="Alana" placeholder="Ketik nama Anda..." required autocomplete="name">
+                <input type="text" id="nama" value="Alana" placeholder="Masukkan namamu..." autocomplete="off">
             </div>
 
             <div class="input-group">
-                <label for="alasan">Keterangan / Alasan (Khusus Izin)</label>
-                <textarea id="alasan" placeholder="Isi alasan jika memilih tombol Izin/Sakit"></textarea>
+                <label for="alasan">Keterangan (Khusus Izin)</label>
+                <textarea id="alasan" placeholder="Contoh: Sakit, Izin Keluarga, dll."></textarea>
             </div>
 
-            <div class="action-grid">
-                <button class="btn-in" onclick="submitAbsen('MASUK')">Absen Masuk</button>
-                <button class="btn-out" onclick="submitAbsen('PULANG')">Absen Pulang</button>
+            <div class="grid-buttons">
+                <button class="btn-masuk" onclick="processAbsensi('MASUK')">
+                    📸 Absen Masuk
+                </button>
+                <button class="btn-pulang" onclick="processAbsensi('PULANG')">
+                    📸 Absen Pulang
+                </button>
             </div>
-            <button class="btn-izin btn-full" onclick="submitAbsen('IZIN')">Ajukan Izin / Sakit</button>
-
-            <div id="errorMessage"></div>
+            <button class="btn-izin" onclick="processAbsensi('IZIN')">
+                📝 Ajukan Izin / Sakit
+            </button>
         </div>
 
         <div class="footer">
-            &copy; 2025 HR Yanoshi System V1.2
+            &copy; 2025 Yanoshi System v2.0
         </div>
     </div>
 
-    <div class="overlay" id="successOverlay">
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <h3>Mengirim Data...</h3>
+        <p style="font-size: 0.9rem; color: #666;">Mohon tunggu sebentar</p>
+    </div>
+
+    <div class="success-overlay" id="successPopup">
         <div class="popup-box">
-            <div class="checkmark-circle">
-                <span class="checkmark">&#10003;</span> </div>
-            <div class="popup-title">Berhasil!</div>
-            <div class="popup-desc">Data berhasil dikirim.</div>
-            <button class="btn-close" onclick="closePopup()">Tutup</button>
+            <div class="checkmark-circle">✔</div>
+            <h2 style="font-size:1.2rem; margin-bottom:5px;">Berhasil!</h2>
+            <p style="font-size:0.9rem; color:#64748b;">Data absensi & foto telah tersimpan.</p>
+            <button class="popup-btn" onclick="closePopup()">Tutup</button>
         </div>
     </div>
 
     <script>
-        // --- JANGAN LUPA GANTI URL INI ---
+        // =================================================================
+        // KONFIGURASI PENTING
+        // Ganti URL di bawah ini dengan URL Web App (Exec) dari Google Script Anda
+        // =================================================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBoY37qxOmPwy8RWZ9T-NJARrn5s7aegb0qK5fEnuzQRT_CxC34dQckgblk-o2X5yE/exec'; 
+        // =================================================================
 
+        const video = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvasElement');
+        
+        // 1. SETUP JAM REALTIME
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
@@ -228,100 +259,122 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        function submitAbsen(status) {
+        // 2. SETUP KAMERA (Jalan saat web dibuka)
+        async function startCamera() {
+            try {
+                // Meminta akses kamera depan (user facing)
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'user', width: { ideal: 640 } } 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error akses kamera:", err);
+                alert("Gagal mengakses kamera. Pastikan izin kamera diberikan di browsermu.");
+            }
+        }
+        // Jalankan kamera
+        startCamera();
+
+        // 3. LOGIKA UTAMA ABSENSI
+        function processAbsensi(status) {
             const nama = document.getElementById('nama').value.trim();
             const alasan = document.getElementById('alasan').value.trim();
-            
+
+            // Validasi Input Dasar
             if (!nama) {
-                showError('Harap isi nama!');
+                alert("Harap isi Nama!");
                 return;
             }
+
+            // Validasi Khusus Izin
             if (status === 'IZIN' && !alasan) {
-                showError('Wajib mengisi alasan untuk izin!');
+                alert("Untuk Izin, wajib mengisi kolom Keterangan!");
                 document.getElementById('alasan').focus();
                 return;
             }
 
-            setLoading(true);
+            // Tampilkan Loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            // Ambil Foto (Hanya jika Masuk/Pulang)
+            // Untuk Izin, kita kirim string kosong agar lebih cepat/hemat data
+            let fotoBase64 = "";
             
-            // Ambil Lokasi
+            if (status !== 'IZIN') {
+                // Capture frame video ke canvas
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                const ctx = canvas.getContext('2d');
+                
+                // Flip canvas agar sesuai preview (Mirroring)
+                ctx.translate(canvas.width, 0);
+                ctx.scale(-1, 1);
+                
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Konversi ke JPG Base64 (Kualitas 0.6 kompresi sedang)
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                fotoBase64 = dataUrl.split(',')[1]; // Hapus prefix data:image/...
+            }
+
+            // Ambil Lokasi GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const lokasi = `${position.coords.latitude}, ${position.coords.longitude}`;
-                        sendData(nama, status, lokasi, alasan);
+                        const lokasi = `${position.coords.latitude},${position.coords.longitude}`;
+                        sendDataToScript(nama, status, lokasi, alasan, fotoBase64);
                     },
                     (error) => {
-                        sendData(nama, status, "GPS Error/Disabled", alasan); 
+                        // Jika GPS error/ditolak, tetap kirim dengan catatan
+                        sendDataToScript(nama, status, "GPS Error/Disabled", alasan, fotoBase64);
                     }
                 );
             } else {
-                sendData(nama, status, "GPS Not Supported", alasan);
+                sendDataToScript(nama, status, "GPS Not Supported", alasan, fotoBase64);
             }
         }
 
-        function sendData(nama, status, lokasi, alasan) {
-            const deviceInfo = navigator.userAgent;
+        // 4. KIRIM KE GOOGLE SHEETS
+        function sendDataToScript(nama, status, lokasi, alasan, foto) {
             const formData = new FormData();
             formData.append('nama', nama);
             formData.append('status', status);
             formData.append('lokasi', lokasi);
-            formData.append('device', deviceInfo);
-            formData.append('alasan', alasan); 
+            formData.append('alasan', alasan);
+            formData.append('device', navigator.userAgent);
+            formData.append('fotoBase64', foto);
 
+            // Fetch dengan mode no-cors (Standard untuk GAS)
             fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
                 .then(response => {
-                    // SUKSES: Tampilkan Popup
-                    showSuccessPopup();
+                    // Sembunyikan Loading
+                    document.getElementById('loadingOverlay').style.display = 'none';
                     
-                    // Reset Form
+                    // Tampilkan Popup Sukses
+                    document.getElementById('successPopup').style.display = 'flex';
+                    
+                    // Simpan nama di memori HP
+                    localStorage.setItem('last_name_absen', nama);
+                    
+                    // Reset Form Izin (Nama jangan direset)
                     if(status === 'IZIN') document.getElementById('alasan').value = '';
-                    setLoading(false);
-                    localStorage.setItem('last_name', nama);
                 })
                 .catch(error => {
-                    showError('Gagal koneksi ke server.');
-                    setLoading(false);
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    alert("Terjadi kesalahan koneksi internet.");
                 });
         }
 
-        // --- FUNGSI POPUP BARU ---
-        function showSuccessPopup() {
-            const overlay = document.getElementById('successOverlay');
-            overlay.style.display = 'flex'; // Munculkan popup
-            
-            // Opsional: Otomatis tutup setelah 3 detik
-            // setTimeout(closePopup, 3000); 
-        }
-
+        // 5. FITUR TAMBAHAN
         function closePopup() {
-            document.getElementById('successOverlay').style.display = 'none';
+            document.getElementById('successPopup').style.display = 'none';
         }
 
-        function showError(msg) {
-            const el = document.getElementById('errorMessage');
-            el.style.display = 'block';
-            el.innerText = msg;
-            setTimeout(() => { el.style.display = 'none'; }, 4000);
-        }
-
-        function setLoading(isLoading) {
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(btn => {
-                if(isLoading) {
-                    btn.classList.add('btn-loading');
-                    btn.disabled = true;
-                } else {
-                    btn.classList.remove('btn-loading');
-                    btn.disabled = false;
-                }
-            });
-        }
-
+        // Auto Load Nama Terakhir
         window.onload = () => {
-            const savedName = localStorage.getItem('last_name');
-            if(savedName) document.getElementById('nama').value = savedName;
-        }
+            const savedName = localStorage.getItem('last_name_absen');
+            if (savedName) document.getElementById('nama').value = savedName;
+        };
     </script>
 </body>
 </html>
